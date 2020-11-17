@@ -2,17 +2,28 @@ spring:
   kafka:
     bootstrap-servers: 10.1.5.70:6667,10.1.5.71:6667,10.1.5.72:6667
     producer:
+      # 重试次数，默认Integer.MAX_VALUE
       retries: 0
+      # 同一批次内存大小（默认16K）
       batch-size: 16384
+      # 生产者内存缓存区大小(32M)
       buffer-memory: 33554432
+      # key和value的序列化
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # ack应答机制，默认1，即只需要确认leader收到消息
+      acks: 1
+
     consumer:
       group-id: group12
       enable-auto-commit: false
+      # earliest：从头开始消费   latest：从最新的开始消费   默认latest
       auto-offset-reset: latest
+      # key和value反序列化
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+    topic: test12
 
 logging:
   level:
@@ -20,4 +31,4 @@ logging:
   file:
     path: /data/springkafka/logs
 server:
-  port: 0312
+  port: 8012

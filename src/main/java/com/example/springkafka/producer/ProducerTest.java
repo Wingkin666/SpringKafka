@@ -1,6 +1,7 @@
 package com.example.springkafka.producer;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,9 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProducerTest {
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
+    @Value("${spring.kafka.topic}")
+    private String topic;
     @GetMapping("/kafka/{message}")
     public void sendMessage(@PathVariable("message") String callbackMessage) {
-        kafkaTemplate.send("test12", callbackMessage).addCallback(success -> {
+        kafkaTemplate.send(topic, callbackMessage).addCallback(success -> {
             // 消息发送到的topic
             String topic = success.getRecordMetadata().topic();
             // 消息发送到的分区
